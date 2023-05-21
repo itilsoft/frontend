@@ -67,10 +67,12 @@ const styles = StyleSheet.create({
     height: 100,
   },
   label: {
+    borderRadius:5,
     width: '100%',
     color: '#fff',
   },
   input: {
+    borderRadius: 5,
     width: '100%',
     height: 50,
     padding: 10,
@@ -81,6 +83,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, // ve kalınlığını 1 olarak belirledik
   },
   loginButton: {
+    borderRadius: 5,
     width: '100%',
     padding: 10,
     backgroundColor: 'yellow',
@@ -88,10 +91,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   loginButtonText: {
+    borderRadius: 5,
     color: '#000',
     textAlign: 'center',
   },
   signupButton: {
+    borderRadius: 5,
     width: '100%',
     padding: 10,
     backgroundColor: '#353535',
