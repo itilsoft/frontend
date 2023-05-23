@@ -2,56 +2,58 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, FlatList } from 'react-native';
 
 const services = ['Bilgisayar Tamiri'
-                  ,'Web Tasarım'
-                  ,'Mobil Tasarım'
-                  ,'Kombi Tamiri'
-                  ,'Araba Yıkama'
-                  ,'Petek Temizleme'
-                  ,'Ev veya Ofis Temizleme'
-                  ,'İngilizce Eğtimi'
-                  ,'Kodlama Eğitimi'];
+  , 'Web Tasarım'
+  , 'Mobil Tasarım'
+  , 'Kombi Tamiri'
+  , 'Araba Yıkama'
+  , 'Petek Temizleme'
+  , 'Ev veya Ofis Temizleme'
+  , 'İngilizce Eğtimi'
+  , 'Kodlama Eğitimi'];
 
-const ServicesScreen = () => (
-  <View style={styles.container}>
-    <View style={styles.header}>
-    <TouchableOpacity onPress={() => Linking.openURL('http://example.com')}>
-    <Image source={require('../assets/logo.png')} style={styles.logo} />
-    </TouchableOpacity>
-      <TouchableOpacity onPress={() => Linking.openURL('http://example.com')}>
-        <Image source={require('../assets/profile.png')} style={styles.profile} />
-      </TouchableOpacity>
-    </View>
-    <View style={styles.body}>
-      <Text style={styles.headerText}>Hizmetler</Text>
-      <FlatList 
-        data={services}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <View style={styles.serviceContainer}>
-            <TouchableOpacity style={styles.serviceRow} onPress={() => Linking.openURL('http://example.com')}>
-              <Text style={styles.serviceText}>
-                {item}
-              </Text>
-              <View style={styles.stars}>
-                {[...Array(5)].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
-              </View>
-            </TouchableOpacity>
-            {index % 2 === 0 && (
-              <TouchableOpacity style={styles.commentButton1}>
-                <Text style={styles.commentButtonText1}>Yorum Yap</Text>
+export default ServicesScreen = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => Linking.openURL('http://example.com')}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => Linking.openURL('http://example.com')}>
+          <Image source={require('../assets/profile.png')} style={styles.profile} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.body}>
+        <Text style={styles.headerText}>Hizmetler</Text>
+        <FlatList
+          data={services}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View style={styles.serviceContainer}>
+              <TouchableOpacity style={styles.serviceRow} onPress={() => Linking.openURL('http://example.com')}>
+                <Text style={styles.serviceText}>
+                  {item}
+                </Text>
+                <View style={styles.stars}>
+                  {[...Array(5)].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
+                </View>
               </TouchableOpacity>
-            )}
-            {index % 2 !== 0 && (
-              <TouchableOpacity style={styles.commentButton2}>
-                <Text style={styles.commentButtonText2}>Verdiğiniz puan 5/5</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
-      />
+              {index % 2 === 0 && (
+                <TouchableOpacity style={styles.commentButton1}>
+                  <Text style={styles.commentButtonText1}>Yorum Yap</Text>
+                </TouchableOpacity>
+              )}
+              {index % 2 !== 0 && (
+                <TouchableOpacity style={styles.commentButton2}>
+                  <Text style={styles.commentButtonText2}>Verdiğiniz puan 5/5</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+        />
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', // yıldızları ve metni aynı hizaya getirir
   },
   serviceText: {
-    color:'#fff',
+    color: '#fff',
     fontSize: 18,
   },
   stars: {
@@ -124,5 +126,3 @@ const styles = StyleSheet.create({
     color: 'yellow',
   },
 });
-
-export default ServicesScreen;

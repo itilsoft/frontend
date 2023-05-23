@@ -1,54 +1,58 @@
-import React, { Component } from 'react';
-import { Alert, Text, TouchableOpacity, TextInput, View, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, TextInput, View, StyleSheet, Image, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import LoginApi from '../api/LoginApi';
+import { saveTokenToStorage } from '../utils/TokenUtil';
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      username: '',
-      password: '',
-    };
-  }
-  
-  onLogin() {
-    const { username, password } = this.state;
+export default LoginScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
 
-    Alert.alert('Credentials', `${username} + ${password}`);
-  }
+  const onLogin = async () => {
+    try {
+      const response = await LoginApi(username, password);
+      if (response.success) {
+        await saveTokenToStorage(response.token);
+        navigation.navigate('Services');
+      } else {
+        Alert.alert(response.messages.join('\n'));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-  onSignup() {
-    // Kayıt ol butonuna tıklandığında yapılacak işlemler burada olacak.
-  }
+  const onSignup = () => {
+    navigation.navigate('Register');
+  };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Image style={styles.logo} source={require('../assets/logo.png')} />
-        <Text style={styles.label}>Kullanıcı Adı</Text>
-        <TextInput
-          value={this.state.username}
-          onChangeText={(username) => this.setState({ username })}
-          style={styles.input}
-        />
-        <Text style={styles.label}>Şifre</Text>
-        <TextInput
-          value={this.state.password}
-          onChangeText={(password) => this.setState({ password })}
-          secureTextEntry={true}
-          style={styles.input}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={this.onLogin.bind(this)}>
-          <Text style={styles.loginButtonText}>Giriş Yap</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.signupButton} onPress={this.onSignup.bind(this)}>
-          <Text style={styles.signupButtonText}>Hesabım Yok, Kayıt Olmak İstiyorum</Text>
-        </TouchableOpacity>
-        <Image style={styles.bottomImage} source={require('../assets/logo.png')} />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <Image style={styles.logo} source={require('../assets/logo.png')} />
+      <Text style={styles.label}>Kullanıcı Adı</Text>
+      <TextInput
+        value={username}
+        onChangeText={(username) => setUsername(username)}
+        style={styles.input}
+      />
+      <Text style={styles.label}>Şifre</Text>
+      <TextInput
+        value={password}
+        onChangeText={(password) => setPassword(password)}
+        secureTextEntry={true}
+        style={styles.input}
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={onLogin}>
+        <Text style={styles.loginButtonText}>Giriş Yap</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.signupButton} onPress={onSignup}>
+        <Text style={styles.signupButtonText}>Hesabım Yok, Kayıt Olmak İstiyorum</Text>
+      </TouchableOpacity>
+      <Image style={styles.bottomImage} source={require('../assets/ilustrasyon.png')} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   label: {
-    borderRadius:5,
+    borderRadius: 5,
     width: '100%',
     color: '#fff',
   },
