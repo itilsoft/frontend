@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const services = ['Bilgisayar Tamiri'
   , 'Web Tasarım'
@@ -12,6 +13,12 @@ const services = ['Bilgisayar Tamiri'
   , 'Kodlama Eğitimi'];
 
 export default ServicesScreen = () => {
+  const navigation = useNavigation();
+
+  const goToDetail = () => {
+    navigation.navigate('ServiceDetail');
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -38,7 +45,7 @@ export default ServicesScreen = () => {
                 </View>
               </TouchableOpacity>
               {index % 2 === 0 && (
-                <TouchableOpacity style={styles.commentButton1}>
+                <TouchableOpacity style={styles.commentButton1} onPress={goToDetail}>
                   <Text style={styles.commentButtonText1}>Yorum Yap</Text>
                 </TouchableOpacity>
               )}
