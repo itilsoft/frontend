@@ -1,6 +1,8 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ServicesApi } from '../api/ServicesApi';
+import { saveTokenToStorage } from '../utils/TokenUtil';
 
 const services = ['Bilgisayar Tamiri'
   , 'Web Tasarım'
@@ -13,35 +15,57 @@ const services = ['Bilgisayar Tamiri'
   , 'Kodlama Eğitimi'];
 
 export default ServicesScreen = () => {
+  const [service, setServices] = useState([])
   const navigation = useNavigation();
+
+  const getServices = async () => {
+      try {
+        console.log('Screen - response öncesi')
+        const response = await ServicesApi();
+        console.log('Screen - response sonrası')
+        if (response.success) {
+          await saveTokenToStorage(response.token);
+          setServices(response.data)
+        } 
+        else{
+          Alert.alert(response.messages.join('\n'));
+        }
+      }catch (error) {
+        console.log({ error });
+      }
+  }
+
+  useEffect(() => {
+    getServices();
+  }, []); // İkinci parametre olarak boş bir dizi verildi
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Image source={require('../assets/Profile.png')} style={styles.profile} />
-        </TouchableOpacity>
+        <View style={styles.logoRow}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <Image source={require('../assets/Profile.png')} style={styles.profile} />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.headerText}>Hizmetler</Text>
       </View>
       <View style={styles.body}>
-        <Text style={styles.headerText}>Hizmetler</Text>
         <FlatList
           data={services}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <View style={styles.serviceContainer}>
               <TouchableOpacity style={styles.serviceRow} onPress={() => navigation.navigate('ServiceDetail')}>
-                <Text style={styles.serviceText}>
-                  {item}
-                </Text>
+                <Text style={styles.serviceText}>{item}</Text>
                 <View style={styles.stars}>
                   {[...Array(5)].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
                 </View>
               </TouchableOpacity>
               {index % 2 === 0 && (
-                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail')}>
-                  <Text style={styles.commentButtonText1}>Yorum Yap</Text>
-                </TouchableOpacity>
+                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail', { serviceId: 1 })}>
+                <Text style={styles.commentButtonText1}>Yorum Yap</Text>
+              </TouchableOpacity>
               )}
               {index % 2 !== 0 && (
                 <TouchableOpacity style={styles.commentButton2} onPress={() => navigation.navigate('ServiceDetail')}>
@@ -60,20 +84,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
-    paddingTop: 50,
   },
   header: {
+    alignItems: 'center',
+  },
+  logoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
     padding: 20,
   },
   logo: {
-    width: 50,
-    height: 50,
+    resizeMode: 'contain',
+    aspectRatio: 1,
   },
   profile: {
-    width: 50,
-    height: 50,
+    aspectRatio: 1,
   },
   body: {
     padding: 20,
@@ -91,7 +118,7 @@ const styles = StyleSheet.create({
   serviceRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center', // yıldızları ve metni aynı hizaya getirir
+    alignItems: 'center',
   },
   serviceText: {
     color: '#fff',
@@ -103,7 +130,7 @@ const styles = StyleSheet.create({
   star: {
     width: 15,
     height: 15,
-    margin: 1, // Yıldızlar arasında biraz boşluk ekler
+    margin: 1,
   },
   commentButton1: {
     backgroundColor: 'yellow',
@@ -116,10 +143,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
     padding: 10,
-    borderColor: 'gray', // kenarlık rengini belirtir
-    borderWidth: 1, // kenarlık kalınlığını belirtir
+    borderColor: 'gray',
+    borderWidth: 1,
   },
-
   commentButtonText1: {
     color: '#000',
   },

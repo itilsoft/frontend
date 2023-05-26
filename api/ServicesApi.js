@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { getTokenFromStorage } from '../utils/TokenUtil';
 
-export default ServicesApi = async () => {
+export const ServicesApi = async () => {
+    console.log('API - Servicesda')
     const token = await getTokenFromStorage();
     try {
         const response = await axios({
