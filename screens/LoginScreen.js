@@ -1,25 +1,33 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, TextInput, View, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import LoginApi from '../api/LoginApi';
+import { Login } from '../api/UserApi';
 import { saveTokenToStorage } from '../utils/TokenUtil';
 
 export default LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigation = useNavigation();
 
   const onLogin = async () => {
     try {
-      const response = await LoginApi(username, password);
+      setIsButtonDisabled(true);
+      const response = await Login(username, password);
       if (response.success) {
         await saveTokenToStorage(response.token);
-        navigation.navigate('Services');
+        if (response.user.is_admin) {
+          navigation.navigate('Admin', { headerLeft: null });
+        } else {
+          navigation.navigate('Services', { headerLeft: null });
+        }
       } else {
         Alert.alert(response.messages.join('\n'));
       }
     } catch (error) {
-      console.log(error.message);
+      console.log({ error });
+    } finally {
+      setIsButtonDisabled(false);
     }
   };
 
@@ -43,7 +51,7 @@ export default LoginScreen = () => {
         secureTextEntry={true}
         style={styles.input}
       />
-      <TouchableOpacity style={styles.loginButton} onPress={onLogin}>
+      <TouchableOpacity style={styles.loginButton} onPress={onLogin} disabled={isButtonDisabled}>
         <Text style={styles.loginButtonText}>Giriş Yap</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.signupButton} onPress={onSignup}>

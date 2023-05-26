@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, TextInput, View, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import RegisterApi from '../api/RegisterApi';
+import { Register } from '../api/UserApi';
 
 export default RegisterScreen = () => {
   const [fullname, setFullname] = useState('');
@@ -11,8 +11,9 @@ export default RegisterScreen = () => {
 
   const onSignup = async () => {
     try {
-      const response = await RegisterApi(fullname, username, password);
+      const response = await Register(fullname, username, password);
       if (response.success) {
+        Alert.alert('Kayıt oldun! Şimdi giriş yapabilirsin.');
         navigation.navigate('Login');
       } else {
         Alert.alert(response.messages.join('\n'));

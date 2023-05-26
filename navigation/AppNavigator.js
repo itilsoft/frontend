@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,13 +7,43 @@ import RegisterScreen from '../screens/RegisterScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ServicesScreen from '../screens/ServicesScreen';
 import ServiceDetailScreen from '../screens/ServiceDetailScreen';
+import AdminScreen from '../screens/AdminScreen';
+import LoadingScreen from '../screens/LoadingScreen';
+import { GetUser } from '../api/UserApi';
+
+export default AppNavigator = () => {
+  const [initialRoute, setInitialRoute] = useState('Loading');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const userResponse = await GetUser();
+      if (userResponse.success) {
+        if (userResponse.user.is_admin) {
+          setInitialRoute('Admin');
+        } else {
+          setInitialRoute('Services');
+        }
+      } else {
+        setInitialRoute('Login');
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (initialRoute == 'Loading') {
+    return <LoadingScreen />
+  } else {
+    return Pages(initialRoute);
+  }
+};
 
 const Stack = createNativeStackNavigator();
 
-const AppNavigator = () => {
+const Pages = (initialRoute) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName={initialRoute}
         screenOptions={{
           headerStyle: {
             backgroundColor: 'rgb(16,12,12)' // Arka plan rengi
@@ -57,9 +87,12 @@ const AppNavigator = () => {
             )
           })}
         />
+        <Stack.Screen
+          name="Admin"
+          component={AdminScreen}
+          options={{ title: 'Admin Dashboard' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-export default AppNavigator;
+}

@@ -16,6 +16,6 @@ export default ServicesApi = async () => {
         console.log({ response: response.data });
         return response.data;
     } catch (error) {
-        throw new Error(error.response.data.message);
+        console.log({ error });
     }
 };

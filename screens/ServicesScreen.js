@@ -15,17 +15,11 @@ const services = ['Bilgisayar Tamiri'
 export default ServicesScreen = () => {
   const navigation = useNavigation();
 
-  const goToDetail = () => {
-    navigation.navigate('ServiceDetail');
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => Linking.openURL('http://example.com')}>
-          <Image source={require('../assets/logo.png')} style={styles.logo} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => Linking.openURL('http://example.com')}>
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Image source={require('../assets/profile.png')} style={styles.profile} />
         </TouchableOpacity>
       </View>
@@ -36,7 +30,7 @@ export default ServicesScreen = () => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <View style={styles.serviceContainer}>
-              <TouchableOpacity style={styles.serviceRow} onPress={() => Linking.openURL('http://example.com')}>
+              <TouchableOpacity style={styles.serviceRow} onPress={() => navigation.navigate('ServiceDetail')}>
                 <Text style={styles.serviceText}>
                   {item}
                 </Text>
@@ -45,12 +39,12 @@ export default ServicesScreen = () => {
                 </View>
               </TouchableOpacity>
               {index % 2 === 0 && (
-                <TouchableOpacity style={styles.commentButton1} onPress={goToDetail}>
+                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail')}>
                   <Text style={styles.commentButtonText1}>Yorum Yap</Text>
                 </TouchableOpacity>
               )}
               {index % 2 !== 0 && (
-                <TouchableOpacity style={styles.commentButton2}>
+                <TouchableOpacity style={styles.commentButton2} onPress={() => navigation.navigate('ServiceDetail')}>
                   <Text style={styles.commentButtonText2}>Verdiğiniz puan 5/5</Text>
                 </TouchableOpacity>
               )}
