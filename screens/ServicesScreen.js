@@ -18,26 +18,26 @@ export default ServicesScreen = () => {
   const [service, setServices] = useState([])
   const navigation = useNavigation();
 
-  const getServices = async () => {
-      try {
-        console.log('Screen - response öncesi')
-        const response = await ServicesApi();
-        console.log('Screen - response sonrası')
-        if (response.success) {
-          await saveTokenToStorage(response.token);
-          setServices(response.data)
-        } 
-        else{
-          Alert.alert(response.messages.join('\n'));
-        }
-      }catch (error) {
-        console.log({ error });
-      }
-  }
+  // const getServices = async () => {
+  //   try {
+  //     console.log('Screen - response öncesi')
+  //     const response = await ServicesApi();
+  //     console.log('Screen - response sonrası')
+  //     if (response.success) {
+  //       await saveTokenToStorage(response.token);
+  //       setServices(response.data)
+  //     }
+  //     else {
+  //       Alert.alert(response.messages.join('\n'));
+  //     }
+  //   } catch (error) {
+  //     console.log({ error });
+  //   }
+  // }
 
-  useEffect(() => {
-    getServices();
-  }, []); // İkinci parametre olarak boş bir dizi verildi
+  // useEffect(() => {
+  //   getServices();
+  // }, []); // İkinci parametre olarak boş bir dizi verildi
 
   return (
     <View style={styles.container}>
@@ -45,7 +45,7 @@ export default ServicesScreen = () => {
         <View style={styles.logoRow}>
           <Image source={require('../assets/logo.png')} style={styles.logo} />
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Image source={require('../assets/Profile.png')} style={styles.profile} />
+            <Image source={require('../assets/profile.png')} style={styles.profile} />
           </TouchableOpacity>
         </View>
         <Text style={styles.headerText}>Hizmetler</Text>
@@ -63,9 +63,9 @@ export default ServicesScreen = () => {
                 </View>
               </TouchableOpacity>
               {index % 2 === 0 && (
-                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail', { serviceId: 1 })}>
-                <Text style={styles.commentButtonText1}>Yorum Yap</Text>
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail', { serviceId: 2 })}>
+                  <Text style={styles.commentButtonText1}>Yorum Yap</Text>
+                </TouchableOpacity>
               )}
               {index % 2 !== 0 && (
                 <TouchableOpacity style={styles.commentButton2} onPress={() => navigation.navigate('ServiceDetail')}>
