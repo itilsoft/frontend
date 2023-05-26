@@ -66,8 +66,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50, // Üst logo için konumlandırmayı ayarla
     left: 0,
-    width: 100, //Logo boyutlarını ayarlayın
-    height: 100,
+    aspectRatio: 1,
   },
   label: {
     borderRadius: 5,
@@ -113,10 +112,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bottomImage: {
-    position: 'absolute',
-    bottom: 50, // Alt resim için konumlandırmayı ayarla
-    right: 0,
-    width: 100, //Alt resim boyutlarını ayarlayın
-    height: 100,
+    aspectRatio: 1,
   },
 });

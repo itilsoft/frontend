@@ -20,7 +20,7 @@ export default ServicesScreen = () => {
       <View style={styles.header}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Image source={require('../assets/profile.png')} style={styles.profile} />
+          <Image source={require('../assets/Profile.png')} style={styles.profile} />
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
