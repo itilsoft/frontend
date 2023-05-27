@@ -11,7 +11,7 @@ export default LoadingScreen = () => {
       overlayColor="rgb(16,12,12)"
       speed={2}
     >
-      <Text style={styles.title}>SANA SÖZ</Text>
+      <Text style={styles.title}>ITILSOFT</Text>
     </AnimatedLoader>
   );
 };
