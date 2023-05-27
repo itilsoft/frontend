@@ -2,82 +2,66 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ServicesApi } from '../api/ServicesApi';
-import { saveTokenToStorage } from '../utils/TokenUtil';
-
-const services = ['Bilgisayar Tamiri'
-  , 'Web Tasarım'
-  , 'Mobil Tasarım'
-  , 'Kombi Tamiri'
-  , 'Araba Yıkama'
-  , 'Petek Temizleme'
-  , 'Ev veya Ofis Temizleme'
-  , 'İngilizce Eğtimi'
-  , 'Kodlama Eğitimi'];
+import LoadingScreen from './LoadingScreen';
 
 export default ServicesScreen = () => {
-  const [service, setServices] = useState([])
+  const [services, setServices] = useState([])
   const navigation = useNavigation();
 
-  // const getServices = async () => {
-  //   try {
-  //     console.log('Screen - response öncesi')
-  //     const response = await ServicesApi();
-  //     console.log('Screen - response sonrası')
-  //     if (response.success) {
-  //       await saveTokenToStorage(response.token);
-  //       setServices(response.data)
-  //     }
-  //     else {
-  //       Alert.alert(response.messages.join('\n'));
-  //     }
-  //   } catch (error) {
-  //     console.log({ error });
-  //   }
-  // }
+  const getServices = async () => {
+    try {
+      const response = await ServicesApi();
+      if (response.success) {
+        setServices(response.data)
+      }
+      else {
+        Alert.alert(response.messages.join('\n'));
+      }
+    } catch (error) {
+      console.log({ error });
+    }
+  }
 
-  // useEffect(() => {
-  //   getServices();
-  // }, []); // İkinci parametre olarak boş bir dizi verildi
+  useEffect(() => {
+    getServices();
+  }, []);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.logoRow}>
-          <Image source={require('../assets/logo.png')} style={styles.logo} />
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Image source={require('../assets/profile.png')} style={styles.profile} />
-          </TouchableOpacity>
+  if (services.length == 0) {
+    return <LoadingScreen />
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.logoRow}>
+            <Image source={require('../assets/logo.png')} style={styles.logo} />
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+              <Image source={require('../assets/profile.png')} style={styles.profile} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.headerText}>Hizmetler</Text>
         </View>
-        <Text style={styles.headerText}>Hizmetler</Text>
-      </View>
-      <View style={styles.body}>
-        <FlatList
-          data={services}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <View style={styles.serviceContainer}>
-              <TouchableOpacity style={styles.serviceRow} onPress={() => navigation.navigate('ServiceDetail')}>
-                <Text style={styles.serviceText}>{item}</Text>
-                <View style={styles.stars}>
-                  {[...Array(5)].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
-                </View>
-              </TouchableOpacity>
-              {index % 2 === 0 && (
-                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail', { serviceId: 2 })}>
+        <View style={styles.body}>
+          <FlatList
+            data={services}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <View style={styles.serviceContainer}>
+                <TouchableOpacity style={styles.serviceRow} onPress={() => navigation.navigate('ServiceDetail', { serviceId: item.id })}>
+                  <Text style={styles.serviceText}>{item.name}</Text>
+                  <View style={styles.stars}>
+                    {[...Array(item.average_star)].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail', { serviceId: item.id })}>
                   <Text style={styles.commentButtonText1}>Yorum Yap</Text>
                 </TouchableOpacity>
-              )}
-              {index % 2 !== 0 && (
-                <TouchableOpacity style={styles.commentButton2} onPress={() => navigation.navigate('ServiceDetail')}>
-                  <Text style={styles.commentButtonText2}>Verdiğiniz puan 5/5</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
-        />
+              </View>
+            )}
+          />
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({

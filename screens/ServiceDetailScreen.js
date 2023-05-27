@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ServicesApi from '../api/ServiceDetail';
-import AnimatedLoader from "react-native-animated-loader";
+import LoadingScreen from './LoadingScreen';
 
 export default ServiceDetailScreen = ({ route }) => {
 
@@ -57,17 +57,7 @@ export default ServiceDetailScreen = ({ route }) => {
 
 
     if (!serviceDetail) {
-        return (
-            <AnimatedLoader
-                visible={visible}
-                source={require("../loader.json")}
-                animationStyle={styles.lottie}
-                overlayColor="rgb(16,12,12)"
-                speed={2}
-            >
-                <Text style={styles.title}>SELAMLAR</Text>
-            </AnimatedLoader>
-        );
+        return <LoadingScreen />;
     } else {
         return (
             <ScrollView contentContainerStyle={styles.container} ref={scrollViewRef}>
@@ -83,16 +73,7 @@ export default ServiceDetailScreen = ({ route }) => {
                         {serviceDetail.name}
                     </Text>
                     <Text style={styles.details}>
-
-                        {serviceDetail.description}{"\n"}{"\n"}
-                        Boya ve badana işlemleri, her evin ihtiyacı arasında yer almaktadır.
-                        İyi boyanmış bir ev her zaman daha şık ve temiz görünebilmektedir.
-                        Bu bağlamda Bayburt'ta boya ve badana arayışı içerisinde olanlar,
-                        evlerindeki iç ve dış cephe boya badana ihtiyaçlarını en iyi şekilde
-                        giderebilmek için firmamıza kolay bir şekilde ulaşabilmektedir.
-                        Boya ve badana işlemlerine ek olarak duvar tadilatı, duvar kağıdı,
-                        tavan tadilat ve boyası ihtiyaçlarınız için de ekibimizle
-                        iletişime geçebilirsiniz.
+                        {serviceDetail.description}
                     </Text>
                     <Text style={styles.subtitle}>
                         Ortalama Hizmet Puanı
@@ -163,10 +144,6 @@ export default ServiceDetailScreen = ({ route }) => {
 }
 
 const styles = StyleSheet.create({
-    lottie: {
-        width: 300,
-        height: 300,
-    },
     container: {
         flexGrow: 1,
         paddingHorizontal: 15,

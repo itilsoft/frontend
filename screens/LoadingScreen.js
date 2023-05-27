@@ -1,18 +1,30 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+import AnimatedLoader from "react-native-animated-loader";
 
 export default LoadingScreen = () => {
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color="#0000ff" />
-    </View>
+    <AnimatedLoader
+      visible={true}
+      source={require("../assets/loader.json")}
+      animationStyle={styles.lottie}
+      overlayColor="rgb(16,12,12)"
+      speed={2}
+    >
+      <Text style={styles.title}>SANA SÖZ</Text>
+    </AnimatedLoader>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  title: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginTop: 10,
+    color: 'white',
   },
+  lottie: {
+    width: 300,
+    height: 300,
+},
 });
