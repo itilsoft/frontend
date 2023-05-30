@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { ServicesApi } from '../api/ServicesApi';
 import LoadingScreen from './LoadingScreen';
 
 export default ServicesScreen = () => {
   const [services, setServices] = useState([])
   const navigation = useNavigation();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Bu kısım, bu ekranın odaklandığı (geri dönüldüğü) her an tetiklenir.
+      setServices([]);
+      getServices();
+
+      return () => {
+        // Bu kısım, ekranın odaktan çıktığı (yani başka bir sayfaya gidildiği) zaman tetiklenir.
+        // Genellikle temizleme işlemleri için kullanılır.
+      };
+    }, []),
+  );
 
   const getServices = async () => {
     try {
@@ -49,7 +62,8 @@ export default ServicesScreen = () => {
                 <TouchableOpacity style={styles.serviceRow} onPress={() => navigation.navigate('ServiceDetail', { serviceId: item.id })}>
                   <Text style={styles.serviceText}>{item.name}</Text>
                   <View style={styles.stars}>
-                    {[...Array(item.average_star)].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
+                    {[...Array(Math.round(item.average_star))].map((_, i) => <Image key={i} source={require('../assets/star.png')} style={styles.star} />)}
+                    {[...Array(5 - Math.round(item.average_star))].map((_, i) => <Image key={i} source={require('../assets/star-empty.png')} style={styles.star} />)}
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.commentButton1} onPress={() => navigation.navigate('ServiceDetail', { serviceId: item.id })}>

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import ServicesApi from '../api/ServiceDetail';
+import { ServiceDetailApi, AddCommentApi } from '../api/ServiceDetail';
 import LoadingScreen from './LoadingScreen';
 
 export default ServiceDetailScreen = ({ route }) => {
@@ -11,19 +11,19 @@ export default ServiceDetailScreen = ({ route }) => {
     const [averageRating, setAverageRating] = useState(null);
     const [comments, setComments] = useState([]);
 
-    useEffect(() => {
-        const fetchServiceDetail = async () => {
-            try {
-                const response = await ServicesApi(serviceId);
-                const data = response.data;
-                setServiceDetail(data);
-                setAverageRating(data.average_star);
-                setComments(data.comments);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const fetchServiceDetail = async () => {
+        try {
+            const response = await ServiceDetailApi(serviceId);
+            const data = response.data;
+            setServiceDetail(data);
+            setAverageRating(Math.round(data.average_star));
+            setComments(data.comments);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
+    useEffect(() => {
         fetchServiceDetail();
     }, [serviceId]);
 
@@ -43,12 +43,9 @@ export default ServiceDetailScreen = ({ route }) => {
         setUserRating(selectedRating);
     };
 
-    const handleComment = () => {
-        const newComment = {
-            rating: userRating,
-            comment: comment
-        };
-        setComments([...comments, newComment]);
+    const handleComment = async () => {
+        await AddCommentApi(serviceId, userRating, comment);
+        fetchServiceDetail();
         setComment('');
         setUserRating(0);
 
@@ -214,7 +211,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(154,154,154,255)',
+        backgroundColor: 'darkgreen',
         borderRadius: 15,
     },
     buttonText: {
