@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -54,7 +53,7 @@ const Pages = (initialRoute) => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ title: 'Giriş' }}
+          options={{ title: 'Giriş', headerLeft: () => null }}
         />
         <Stack.Screen
           name="Register"
@@ -69,28 +68,17 @@ const Pages = (initialRoute) => {
         <Stack.Screen
           name="Services"
           component={ServicesScreen}
-          options={{ title: 'Servisler' }}
+          options={{ title: 'Servisler', headerLeft: () => null }}
         />
         <Stack.Screen
           name="ServiceDetail"
           component={ServiceDetailScreen}
-          options={({ navigation }) => ({
-            title: 'Badana Hizmeti',
-            headerLeft: () => (
-              <Ionicons
-                name="chevron-back"
-                size={24}
-                color="white"
-                style={{ marginLeft: 10, marginRight: 10 }}
-                onPress={() => navigation.goBack()}
-              />
-            )
-          })}
+          options={{ title: 'Hizmet Detayı' }}
         />
         <Stack.Screen
           name="Admin"
           component={AdminScreen}
-          options={{ title: 'Admin Dashboard' }}
+          options={{ title: 'Admin Dashboard', headerLeft: () => null }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -17,9 +17,9 @@ export default LoginScreen = () => {
       if (response.success) {
         await saveTokenToStorage(response.token);
         if (response.user.is_admin) {
-          navigation.navigate('Admin', { headerLeft: null });
+          navigation.navigate('Admin');
         } else {
-          navigation.navigate('Services', { headerLeft: null });
+          navigation.navigate('Services');
         }
       } else {
         Alert.alert(response.messages.join('\n'));

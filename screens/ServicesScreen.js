@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { ServicesApi } from '../api/ServicesApi';
@@ -34,10 +34,6 @@ export default ServicesScreen = () => {
       console.log({ error });
     }
   }
-
-  useEffect(() => {
-    getServices();
-  }, []);
 
   if (services.length == 0) {
     return <LoadingScreen />

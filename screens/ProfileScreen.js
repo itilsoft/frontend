@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   commentContainer: {
     marginTop: 20,
     alignSelf: 'stretch',
-    height: 300,
+    height: 200,
   },
   comment: {
     marginTop: 10,
