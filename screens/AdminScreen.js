@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { GetStatisticsApi } from '../api/AdminApi';
 import LoadingScreen from './LoadingScreen';
+import { LineChart, BarChart } from "react-native-chart-kit";
 
 export default AdminScreen = () => {
   const [statistics, setStatistics] = useState(null)
@@ -48,9 +49,88 @@ export default AdminScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-        
-        <Text>Adminnn</Text>
 
+        <Text style={styles.label}>Son 7 günde kullanıcı kayıt grafiği</Text>
+        <LineChart
+          data={{
+            labels: statistics.users.map(u => {
+              const items = u.date.split('-');
+              return items[1] + '-' + items[2];
+            }),
+            datasets: [
+              {
+                data: statistics.users.map(u => u.count)
+              }
+            ]
+          }}
+          width={Dimensions.get("window").width} // from react-native
+          height={220}
+          yAxisLabel=""
+          yAxisSuffix=""
+          yAxisInterval={1} // optional, defaults to 1
+          chartConfig={{
+            backgroundColor: "#e26a00",
+            backgroundGradientFrom: "#fb8c00",
+            backgroundGradientTo: "#ffa726",
+            decimalPlaces: 0, // Tam sayı kullanmak için burayı 0'a ayarladık
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16
+            },
+            propsForDots: {
+              r: "6",
+              strokeWidth: "2",
+              stroke: "#ffa726"
+            }
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+        />
+
+        <Text style={styles.label}>Son 7 günde yapılan yorum grafiği</Text>
+        <BarChart
+          data={{
+            labels: statistics.comments.map(u => {
+              const items = u.date.split('-');
+              return items[1] + '-' + items[2];
+            }),
+            datasets: [
+              {
+                data: statistics.comments.map(u => u.count)
+              }
+            ]
+          }}
+          width={Dimensions.get("window").width} // from react-native
+          height={220}
+          yAxisLabel=""
+          yAxisSuffix=""
+          yAxisInterval={1} // optional, defaults to 1
+          chartConfig={{
+            backgroundColor: "#009ee2",
+            backgroundGradientFrom: "#009ee2",
+            backgroundGradientTo: "#ffa726",
+            decimalPlaces: 0, // Tam sayı kullanmak için burayı 0'a ayarladık
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16
+            },
+            propsForDots: {
+              r: "6",
+              strokeWidth: "2",
+              stroke: "#ffa726"
+            }
+          }}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+        />
       </View>
     );
   }
@@ -78,4 +158,9 @@ const styles = StyleSheet.create({
   profile: {
     aspectRatio: 1,
   },
+  label: {
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 10
+  }
 });
