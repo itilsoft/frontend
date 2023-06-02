@@ -10,6 +10,10 @@ export default ServiceDetailScreen = ({ route }) => {
     const [serviceDetail, setServiceDetail] = useState(null);
     const [averageRating, setAverageRating] = useState(null);
     const [comments, setComments] = useState([]);
+    const [visible, setVisible] = useState(true);
+    const [userRating, setUserRating] = useState(0);
+    const [comment, setComment] = useState('');
+    const scrollViewRef = useRef();
 
     const fetchServiceDetail = async () => {
         try {
@@ -27,17 +31,12 @@ export default ServiceDetailScreen = ({ route }) => {
         fetchServiceDetail();
     }, [serviceId]);
 
-    const [visible, setVisible] = useState(true);
     useEffect(() => {
-        setInterval(() => {
-            setVisible(!visible);
+        const interval = setInterval(() => {
+            setVisible((prevVisible) => !prevVisible);
         }, 4000);
+        return () => clearInterval(interval);
     }, []);
-
-
-    const [userRating, setUserRating] = useState(0);
-    const [comment, setComment] = useState('');
-    const scrollViewRef = useRef();
 
     const handleUserRating = (selectedRating) => {
         setUserRating(selectedRating);
@@ -46,10 +45,15 @@ export default ServiceDetailScreen = ({ route }) => {
     const handleComment = async () => {
         await AddCommentApi(serviceId, userRating, comment);
         fetchServiceDetail();
-        setComment('');
-        setUserRating(0);
 
-        scrollViewRef.current.scrollToEnd({ animated: true });
+        setTimeout(() => {
+            setComment('');
+            setUserRating(0);
+
+            scrollViewRef.current.scrollToEnd({ animated: true });
+        }, 5000);
+
+
     };
 
 
@@ -243,6 +247,7 @@ const styles = StyleSheet.create({
     },
     commentText: {
         color: 'white',
+        marginTop: 7,
     },
     commentDivider: {
         borderBottomWidth: 1,
