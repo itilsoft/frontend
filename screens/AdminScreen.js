@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {Text, View, Dimensions, Image, StyleSheet, TouchableOpacity, Alert, FlatList} from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { GetStatisticsApi } from '../api/AdminApi';
 import LoadingScreen from './LoadingScreen';
@@ -49,6 +49,34 @@ export default AdminScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
+
+        <Text style={styles.label}>Tüm servislerin yıldız ortalaması: {statistics.averageRatingOfAllServices}</Text>
+
+        <Text style={styles.label}>En yüksek yıldızlı servisler</Text>
+        <FlatList
+            style={styles.flatList}
+            data={statistics.mostRatingServices}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
+                <View style={styles.listItemContainer}>
+                  <Text style={styles.listItemText}>{item.name}</Text>
+                  <Text style={styles.listItemText}>{item.averageStar}</Text>
+                </View>
+            )}
+        />
+
+        <Text style={styles.label}>En fazla yorum alan servisler</Text>
+        <FlatList
+            style={styles.flatList}
+            data={statistics.mostCommentingServices}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+                <View style={styles.listItemContainer}>
+                  <Text style={styles.listItemText}>{item.name}</Text>
+                  <Text style={styles.listItemText}>{item.commentsCount}</Text>
+                </View>
+            )}
+        />
 
         <Text style={styles.label}>Son 7 günde kullanıcı kayıt grafiği</Text>
         <LineChart
@@ -154,5 +182,21 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     marginTop: 10
+  },
+  flatList: {  // Bu kısım FlatList'in stillerini içerir
+    flex: 1,
+    width: '100%',
+  },
+  listItemContainer: {  // Bu kısım listItem'ların stillerini içerir
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
+  },
+  listItemText: {  // Bu kısım listItem'ların metin stillerini içerir
+    color: 'white',
+    fontSize: 16,
   }
 });
