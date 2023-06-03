@@ -75,9 +75,6 @@ export default AdminScreen = () => {
             decimalPlaces: 0, // Tam sayı kullanmak için burayı 0'a ayarladık
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16
-            },
             propsForDots: {
               r: "6",
               strokeWidth: "2",
@@ -87,7 +84,6 @@ export default AdminScreen = () => {
           bezier
           style={{
             marginVertical: 8,
-            borderRadius: 16
           }}
         />
 
@@ -116,9 +112,6 @@ export default AdminScreen = () => {
             decimalPlaces: 0, // Tam sayı kullanmak için burayı 0'a ayarladık
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16
-            },
             propsForDots: {
               r: "6",
               strokeWidth: "2",
@@ -128,7 +121,6 @@ export default AdminScreen = () => {
           bezier
           style={{
             marginVertical: 8,
-            borderRadius: 16
           }}
         />
       </View>

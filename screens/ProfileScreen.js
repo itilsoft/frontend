@@ -80,7 +80,7 @@ export default ProfileScreen = () => {
           secureTextEntry={true}
           style={styles.input}
         />
-        <Text style={styles.label}>Eski şifre tekrar</Text>
+        <Text style={styles.label}>Yeni şifre tekrar</Text>
         <TextInput
           value={repeatNewPassword}
           onChangeText={(repeatNewPassword) => setRepeatNewPassword(repeatNewPassword)}

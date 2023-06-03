@@ -68,17 +68,17 @@ const Pages = (initialRoute) => {
         <Stack.Screen
           name="Services"
           component={ServicesScreen}
-          options={{ title: 'Servisler', headerLeft: () => null }}
+          options={{ title: 'Servisler'}}
         />
         <Stack.Screen
           name="ServiceDetail"
           component={ServiceDetailScreen}
-          options={{ title: 'Hizmet Detayı' }}
+          options={{ title: 'Hizmet Detayı'}}
         />
         <Stack.Screen
           name="Admin"
           component={AdminScreen}
-          options={{ title: 'Admin Dashboard', headerLeft: () => null }}
+          options={{ title: 'Admin Dashboard'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
