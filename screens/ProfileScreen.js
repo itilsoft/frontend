@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text, TouchableOpacity, TextInput, View, StyleSheet, Image, Alert, FlatList } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import { Logout, UpdatePassword, GetUser } from '../api/UserApi';
 
 export default ProfileScreen = () => {
@@ -11,6 +11,19 @@ export default ProfileScreen = () => {
   const [repeatNewPassword, setRepeatNewPassword] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const navigation = useNavigation();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Bu kısım, bu ekranın odaklandığı (geri dönüldüğü) her an tetiklenir.
+      setUser(null);
+      userInfo();
+
+      return () => {
+        // Bu kısım, ekranın odaktan çıktığı (yani başka bir sayfaya gidildiği) zaman tetiklenir.
+        // Genellikle temizleme işlemleri için kullanılır.
+      };
+    }, []),
+  );
 
   const onLogout = async () => {
     setIsButtonDisabled(true);
@@ -24,7 +37,7 @@ export default ProfileScreen = () => {
   const changePassword = async () => {
     setIsButtonDisabled(true);
 
-    if (newPassword != repeatNewPassword) {
+    if (newPassword !== repeatNewPassword) {
       Alert.alert('Yeni şifreler eşleşmiyor!');
     }
 
@@ -43,10 +56,6 @@ export default ProfileScreen = () => {
       setUser(response.user);
     }
   }
-
-  useEffect(() => {
-    userInfo();
-  }, []);
 
   if (!user) {
     return <LoadingScreen />

@@ -13,23 +13,24 @@ import { GetUser } from '../api/UserApi';
 export default AppNavigator = () => {
   const [initialRoute, setInitialRoute] = useState('Loading');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const userResponse = await GetUser();
-      if (userResponse.success) {
-        if (userResponse.user.is_admin) {
-          setInitialRoute('Admin');
-        } else {
-          setInitialRoute('Services');
-        }
+  const fetchUserData = async () => {
+    const userResponse = await GetUser();
+    if (userResponse.success) {
+      if (userResponse.user.is_admin) {
+        setInitialRoute('Admin');
       } else {
-        setInitialRoute('Login');
+        setInitialRoute('Services');
       }
-    };
-    fetchData();
+    } else {
+      setInitialRoute('Login');
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
   }, []);
 
-  if (initialRoute == 'Loading') {
+  if (initialRoute === 'Loading') {
     return <LoadingScreen />
   } else {
     return Pages(initialRoute);
