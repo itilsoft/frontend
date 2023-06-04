@@ -72,6 +72,9 @@ export default AdminScreen = () => {
             </View>
 
             <Text style={styles.label}>Tüm servislerin yıldız ortalaması: <Text style={{ fontSize: 25 }}>{statistics.averageRatingOfAllServices}</Text></Text>
+
+            <Text style={styles.label}>Tüm servislerin yorum sayısı: <Text style={{ fontSize: 25 }}>{statistics.mostCommentingServices.map(item => item.commentsCount).reduce((a, b) => a + b)}</Text></Text>
+
             <View>
               {sections.map((section) => (
                 <React.Fragment key={section.title}>
@@ -80,6 +83,8 @@ export default AdminScreen = () => {
                 </React.Fragment>
               ))}
             </View>
+
+
 
             <Text style={styles.label}>Son 7 günde kullanıcı kayıt grafiği</Text>
             <LineChart
@@ -90,7 +95,7 @@ export default AdminScreen = () => {
                 }),
                 datasets: [
                   {
-                    data: statistics.users.map((u) => u.count),
+                    data: statistics.users.map((u) => u.count)
                   },
                 ],
               }}
@@ -104,7 +109,7 @@ export default AdminScreen = () => {
                 backgroundColor: '#e26a00',
                 backgroundGradientFrom: '#fb8c00',
                 backgroundGradientTo: '#ffa726',
-                decimalPlaces: 1, // Tam sayı kullanmak için burayı 0'a ayarladık
+                decimalPlaces: 0, // Tam sayı kullanmak için burayı 0'a ayarladık
                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 propsForDots: {
@@ -163,7 +168,6 @@ export default AdminScreen = () => {
                 },
               }}
               bezier
-              barPercentage={0.9} // Çubuklar arasındaki boşluğu azaltmak için bu satırı ekledik
               style={{
                 marginVertical: 8,
                 marginLeft: 10,
